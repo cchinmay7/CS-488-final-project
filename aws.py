@@ -2,10 +2,13 @@ from flask import request
 import boto3
 import uuid
 from datetime import datetime
-import os
+from pathlib import Path
+from dotenv import dotenv_values
 
-AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
-AWS_SECRET_KEY = os.getenv("AWS_SECRET_KEY")
+ENV_VARS = dotenv_values(Path(__file__).resolve().parent / '.env')
+
+AWS_ACCESS_KEY = ENV_VARS.get('AWS_ACCESS_KEY')
+AWS_SECRET_KEY = ENV_VARS.get('AWS_SECRET_KEY') 
 
 REGION = 'us-east-1'
 
