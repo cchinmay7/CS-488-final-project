@@ -5,13 +5,19 @@
         <title>Feed</title>
     </head>
     <body onload="initFeedPage();">
-        <h1>The Project Formerly Known as Twitter</h1>
-        <a href="/feed.html">Feed</a> |
-        <a href="/u/{{ username }}">My Profile</a> |
-        <a href="/logout" onclick="doLogout(); return false;">Logout</a>
-        <hr/>
+        <div class="page">
+            <div class="topbar">
+                <h1>The Project Formerly Known as Twitter</h1>
+                <div class="subtitle">Recent posts from everyone</div>
+                <div class="navline">
+                    <a href="/feed.html">Feed</a> |
+                    <a href="/u/{{ username }}">My Profile</a> |
+                    <a href="/logout" onclick="doLogout(); return false;">Logout</a>
+                </div>
+            </div>
 
-        <div id="divFeed"></div>
+            <div id="divFeed"></div>
+        </div>
 
         <script src="/static/script.js"></script>
     </body>

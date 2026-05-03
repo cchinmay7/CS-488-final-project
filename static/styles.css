@@ -1,92 +1,201 @@
+:root {
+    --bg-top: #eef6ff;
+    --bg-mid: #f9fcff;
+    --bg-btm: #fef8ef;
+    --ink: #1e2d3b;
+    --muted: #5f7286;
+    --panel: #ffffff;
+    --line: #d9e3ee;
+    --brand: #1f6fbf;
+    --brand-dark: #165997;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    background: #f4f6fa;
-    max-width: 860px;
-    margin: 12px auto;
-    padding: 0 10px;
-    font-family: Tahoma, Verdana, sans-serif;
-    color: #1f2933;
+    margin: 0;
+    padding: 22px 14px 34px;
+    color: var(--ink);
+    font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+    background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-btm) 100%);
+    min-height: 100vh;
+}
+
+.page {
+    max-width: 920px;
+    margin: 0 auto;
 }
 
 h1 {
-    margin-bottom: 8px;
+    margin: 0;
+    font-family: "Palatino Linotype", "Book Antiqua", serif;
+    font-size: 36px;
+    letter-spacing: 0.4px;
+}
+
+h3 {
+    margin: 0 0 10px;
 }
 
 a {
-    color: #1e4f91;
+    color: var(--brand);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a:hover {
+    color: var(--brand-dark);
+    text-decoration: underline;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 16px 0;
 }
 
 input,
 textarea,
 button {
+    margin-top: 6px;
+    margin-bottom: 8px;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+input[type="text"],
+input[type="password"],
+textarea,
+input[type="file"] {
+    width: 100%;
+    border: 1px solid #c8d6e5;
+    border-radius: 10px;
+    background: #ffffff;
+    color: var(--ink);
+    padding: 10px 12px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    border: 1px solid var(--brand-dark);
+    border-radius: 999px;
+    background: var(--brand);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--brand-dark);
+}
+
+.topbar {
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 6px 18px rgba(23, 47, 79, 0.08);
+}
+
+.subtitle {
     margin-top: 4px;
-    margin-bottom: 6px;
+    color: var(--muted);
+}
+
+.navline {
+    margin-top: 10px;
+    color: var(--muted);
 }
 
 .panel {
-    background: #ffffff;
-    border: 1px solid #d7dde5;
-    border-radius: 8px;
-    padding: 12px;
-    width: 420px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    width: 100%;
+    max-width: 520px;
     margin-bottom: 12px;
+    box-shadow: 0 6px 18px rgba(23, 47, 79, 0.08);
+}
+
+.authWrap {
+    display: grid;
+    place-items: center;
+    min-height: calc(100vh - 56px);
 }
 
 .postCard {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     background: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #d7dde5;
-    box-shadow: 1px 1px 2px #dfe4ea;
-    padding: 10px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    box-shadow: 0 6px 18px rgba(23, 47, 79, 0.08);
+    padding: 12px;
 }
 
 .postHeader {
     font-weight: 700;
-    margin-bottom: 2px;
-}
-
-.postTitle {
-    font-weight: 700;
-    font-size: 17px;
-    color: #0f2f57;
+    margin-bottom: 4px;
 }
 
 .postDate {
-    color: #4d5c6b;
-    margin-bottom: 8px;
+    color: var(--muted);
+    margin-bottom: 9px;
     font-size: 13px;
 }
 
 .postText {
-    color: #243445;
+    color: #23384f;
+    line-height: 1.5;
     white-space: pre-wrap;
-}
-
-.btnDelete {
-    cursor: pointer;
-    font-size: 20px;
-    margin-right: 6px;
-    border: none;
-    background: transparent;
-    padding: 0;
-    line-height: 1;
 }
 
 .profileHeader {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
 }
 
 .profilePhoto {
-    width: 90px;
-    height: 90px;
-    border-radius: 8px;
-    border: 1px solid #d7dde5;
+    width: 92px;
+    height: 92px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    object-fit: cover;
+    background: #e7eef7;
 }
 
 .profileName {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
+}
+
+.sectionTitle {
+    margin: 12px 0 8px;
+}
+
+@media (max-width: 720px) {
+    body {
+        padding: 14px 10px 26px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    .profileHeader {
+        align-items: flex-start;
+    }
 }
