@@ -1,124 +1,226 @@
-function callApi(url, onDone) {
-    let req = new XMLHttpRequest();
-    req.onload = function() {
-        if (req.status != 200) {
-            console.log("Error");
+function loadDoc(url, func) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        if (xhttp.status != 200) {
+            console.log('Error');
         } else {
-            onDone(req.response);
+            func(xhttp.response);
         }
     };
 
-    req.open("GET", url);
-    req.send();
+    xhttp.open('GET', url);
+    xhttp.send();
 }
 
-function makeDeleteButton(postId) {
-    return '<button class="btnDelete" onclick="removePost(\'' + postId + '\');" title="Delete">&#128465;</button> ';
+function escapeText(value) {
+    let temp = value;
+    temp = temp.replaceAll('&', '&amp;');
+    temp = temp.replaceAll('<', '&lt;');
+    temp = temp.replaceAll('>', '&gt;');
+    return temp;
 }
 
-function drawPosts(responseText, canDelete) {
-    let payload = JSON.parse(responseText);
-    let posts = payload["results"];
-    let html = "";
-
-    if (posts.length == 0) {
-        document.getElementById("postList").innerHTML = "No blog entries yet.";
-        return;
+function postCardHtml(post, showReplyLink) {
+    let html = '<div class="postCard">';
+    html += '<div class="postHeader"><a href="/u/' + encodeURIComponent(post['authorUsername']) + '">@' + escapeText(post['authorUsername']) + '</a></div>';
+    html += '<div class="postDate">' + escapeText(post['date']) + '</div>';
+    html += '<div class="postText">' + escapeText(post['text']) + '</div>';
+    if (showReplyLink) {
+        html += '<div><a href="/post.html?id=' + encodeURIComponent(post['entryID']) + '">[ reply ]</a></div>';
     }
-
-    for (let i = 0; i < posts.length; i++) {
-        html += '<div class="postCard">';
-        if (canDelete) {
-            html += makeDeleteButton(posts[i]["entryID"]);
-        }
-        html += '<div class="postTitle">' + posts[i]["title"] + "</div>";
-        html += '<div class="postDate">' + posts[i]["date"] + "</div>";
-        html += '<div class="postText">' + posts[i]["text"] + "</div>";
-        html += "</div>";
-    }
-
-    document.getElementById("postList").innerHTML = html;
-}
-
-function initHomePage() {
-    callApi("/listentries", handleHomePosts);
-}
-
-function handleHomePosts(responseText) {
-    drawPosts(responseText, false);
-}
-
-function initEditorPage() {
-    callApi("/listentries", function(responseText) {
-        drawPosts(responseText, true);
-    });
+    html += '</div>';
+    return html;
 }
 
 function submitLogin() {
-    let emailValue = document.getElementById("email").value;
-    let passwordValue = document.getElementById("password").value;
+    let login = document.getElementById('login').value;
+    let password = document.getElementById('password').value;
 
-    if (emailValue == "" || passwordValue == "") {
-        alert("Email and password are required");
-        return;
-    }
-
-    let loginUrl = "/login?email=" + encodeURIComponent(emailValue) + "&password=" + encodeURIComponent(passwordValue);
-    callApi(loginUrl, handleLoginResult);
+    let url = '/login?login=' + encodeURIComponent(login) + '&password=' + encodeURIComponent(password);
+    loadDoc(url, submitLoginResponse);
 }
 
-function handleLoginResult(responseText) {
-    let payload = JSON.parse(responseText);
-    if (payload["result"] != "OK") {
-        alert(payload["result"]);
-    } else {
-        window.location.replace("/editor.html");
+function submitLoginResponse(responseText) {
+    let data = JSON.parse(responseText);
+    if (data['result'] != 'OK') {
+        alert(data['result']);
+        return;
     }
+    window.location.replace('/feed.html');
+}
+
+function submitSignup() {
+    let email = document.getElementById('email').value;
+    let username = document.getElementById('username').value;
+    let password = document.getElementById('password').value;
+
+    let url = '/signup?email=' + encodeURIComponent(email);
+    url += '&username=' + encodeURIComponent(username);
+    url += '&password=' + encodeURIComponent(password);
+
+    loadDoc(url, submitSignupResponse);
+}
+
+function submitSignupResponse(responseText) {
+    let data = JSON.parse(responseText);
+    if (data['result'] != 'OK') {
+        alert(data['result']);
+        return;
+    }
+    window.location.replace('/feed.html');
 }
 
 function doLogout() {
-    callApi("/logout", handleLogoutResult);
+    loadDoc('/logout', doLogoutResponse);
 }
 
-function handleLogoutResult(responseText) {
-    window.location.replace("/login.html");
+function doLogoutResponse(responseText) {
+    window.location.replace('/login.html');
 }
 
-function addPost() {
-    let titleValue = document.getElementById("title").value;
-    let textValue = document.getElementById("text").value;
-
-    let addUrl = "/addentry?title=" + encodeURIComponent(titleValue) + "&text=" + encodeURIComponent(textValue);
-    callApi(addUrl, handleAddPostResult);
+function initFeedPage() {
+    loadDoc('/feedposts', initFeedPageResponse);
 }
 
-function handleAddPostResult(responseText) {
-    let payload = JSON.parse(responseText);
-    if (payload["result"] != "OK") {
-        alert(payload["result"]);
+function initFeedPageResponse(responseText) {
+    let data = JSON.parse(responseText);
+    let posts = data['results'];
+    let html = '';
+
+    for (let i = 0; i < posts.length; i++) {
+        html += postCardHtml(posts[i], true);
+    }
+
+    if (html == '') {
+        html = 'No posts yet.';
+    }
+
+    document.getElementById('divFeed').innerHTML = html;
+}
+
+function initProfilePage(username) {
+    loadDoc('/profileinfo?username=' + encodeURIComponent(username), initProfileInfoResponse);
+    loadDoc('/userposts?username=' + encodeURIComponent(username), initProfilePostsResponse);
+}
+
+function initProfileInfoResponse(responseText) {
+    let data = JSON.parse(responseText);
+    if (data['result'] != 'OK') {
+        alert(data['result']);
         return;
     }
 
-    document.getElementById("title").value = "";
-    document.getElementById("text").value = "";
-    callApi("/listentries", function(responseText) {
-        drawPosts(responseText, true);
-    });
+    document.getElementById('profileImage').src = data['photo'];
+    document.getElementById('profileUsername').innerHTML = '@' + escapeText(data['username']);
 }
 
-function removePost(postId) {
-    let removeUrl = "/deleteentry?id=" + encodeURIComponent(postId);
-    callApi(removeUrl, handleRemovePostResult);
+function initProfilePostsResponse(responseText) {
+    let data = JSON.parse(responseText);
+    let posts = data['results'];
+    let html = '';
+
+    for (let i = 0; i < posts.length; i++) {
+        html += postCardHtml(posts[i], true);
+    }
+
+    if (html == '') {
+        html = 'No posts yet.';
+    }
+
+    document.getElementById('divProfilePosts').innerHTML = html;
 }
 
-function handleRemovePostResult(responseText) {
-    let payload = JSON.parse(responseText);
-    if (payload["result"] != "OK") {
-        alert(payload["result"]);
+function createProfilePost() {
+    let txtPost = document.getElementById('txtPost');
+    let url = '/createpost?text=' + encodeURIComponent(txtPost.value);
+    loadDoc(url, createProfilePostResponse);
+}
+
+function createProfilePostResponse(responseText) {
+    let data = JSON.parse(responseText);
+    if (data['result'] != 'OK') {
+        alert(data['result']);
         return;
     }
 
-    callApi("/listentries", function(responseText) {
-        drawPosts(responseText, true);
-    });
+    let username = document.getElementById('profilePageUsername').value;
+    document.getElementById('txtPost').value = '';
+    loadDoc('/userposts?username=' + encodeURIComponent(username), initProfilePostsResponse);
+}
+
+function uploadProfilePhoto() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        if (xhttp.status != 200) {
+            console.log('Error');
+        } else {
+            uploadProfilePhotoResponse(xhttp.response);
+        }
+    };
+
+    xhttp.open('POST', '/uploadphoto', true);
+
+    let formData = new FormData();
+    let fileControl = document.getElementById('photoFile');
+    if (fileControl.files.length == 0) {
+        alert('Please choose a photo first');
+        return;
+    }
+    formData.append('file', fileControl.files[0]);
+    xhttp.send(formData);
+}
+
+function uploadProfilePhotoResponse(responseText) {
+    let data = JSON.parse(responseText);
+    if (data['result'] != 'OK') {
+        alert(data['result']);
+        return;
+    }
+    document.getElementById('profileImage').src = data['url'];
+}
+
+function initPostPage(entryID) {
+    loadDoc('/post?id=' + encodeURIComponent(entryID), initPostPageResponse);
+}
+
+function initPostPageResponse(responseText) {
+    let data = JSON.parse(responseText);
+    if (data['result'] != 'OK') {
+        alert(data['result']);
+        return;
+    }
+
+    let html = postCardHtml(data['post'], false);
+    document.getElementById('divPost').innerHTML = html;
+
+    let replies = data['replies'];
+    let replyHtml = '';
+    for (let i = 0; i < replies.length; i++) {
+        replyHtml += postCardHtml(replies[i], false);
+    }
+
+    if (replyHtml == '') {
+        replyHtml = 'No replies yet.';
+    }
+
+    document.getElementById('divReplies').innerHTML = replyHtml;
+}
+
+function createReply() {
+    let entryID = document.getElementById('entryID').value;
+    let text = document.getElementById('txtReply').value;
+    let url = '/createpost?text=' + encodeURIComponent(text) + '&parent=' + encodeURIComponent(entryID);
+    loadDoc(url, createReplyResponse);
+}
+
+function createReplyResponse(responseText) {
+    let data = JSON.parse(responseText);
+    if (data['result'] != 'OK') {
+        alert(data['result']);
+        return;
+    }
+
+    let entryID = document.getElementById('entryID').value;
+    document.getElementById('txtReply').value = '';
+    loadDoc('/post?id=' + encodeURIComponent(entryID), initPostPageResponse);
 }

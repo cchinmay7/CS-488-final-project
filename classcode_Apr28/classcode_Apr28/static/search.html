@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Course Search</title>
+        <link rel="stylesheet" href="/static/styles.css">
+    </head>
+    <body>
+
+        <h1>Course Search</h1>
+
+        Searh: <input type="text" id="txtSearch">
+
+        <select id="orderby">
+            <option value="name">Name</option>
+            <option value="desc">Description</option>
+        </select>
+
+        <button onclick="course_search();">Go!</button>
+
+        <hr>
+        <div id="divResults">
+            Type in a search and hit go...
+        </div>
+
+        <script src="/static/script.js"></script>
+    </body>
+</html>

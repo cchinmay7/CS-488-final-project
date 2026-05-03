@@ -27,7 +27,8 @@ button {
     border: 1px solid #d7dde5;
     border-radius: 8px;
     padding: 12px;
-    width: 340px;
+    width: 420px;
+    margin-bottom: 12px;
 }
 
 .postCard {
@@ -37,6 +38,11 @@ button {
     border: 1px solid #d7dde5;
     box-shadow: 1px 1px 2px #dfe4ea;
     padding: 10px;
+}
+
+.postHeader {
+    font-weight: 700;
+    margin-bottom: 2px;
 }
 
 .postTitle {
@@ -64,4 +70,23 @@ button {
     background: transparent;
     padding: 0;
     line-height: 1;
+}
+
+.profileHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.profilePhoto {
+    width: 90px;
+    height: 90px;
+    border-radius: 8px;
+    border: 1px solid #d7dde5;
+}
+
+.profileName {
+    font-size: 22px;
+    font-weight: 700;
 }

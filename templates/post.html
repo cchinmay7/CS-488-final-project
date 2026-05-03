@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/styles.css" />
+        <title>Post</title>
+    </head>
+    <body onload="initPostPage('{{ entry_id }}');">
+        <h1>Post</h1>
+        <a href="/feed.html">Feed</a> |
+        <a href="/u/{{ session['username'] }}">My Profile</a> |
+        <a href="/logout" onclick="doLogout(); return false;">Logout</a>
+        <hr/>
+
+        <div id="divPost"></div>
+
+        <h3>Replies</h3>
+        <input type="hidden" id="entryID" value="{{ entry_id }}" />
+        <textarea id="txtReply" rows="3" cols="60"></textarea><br/>
+        <button onclick="createReply();">Reply</button>
+
+        <hr/>
+        <div id="divReplies"></div>
+
+        <script src="/static/script.js"></script>
+    </body>
+</html>
