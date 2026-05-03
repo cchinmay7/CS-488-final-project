@@ -1,0 +1,67 @@
+body {
+    background: #f4f6fa;
+    max-width: 860px;
+    margin: 12px auto;
+    padding: 0 10px;
+    font-family: Tahoma, Verdana, sans-serif;
+    color: #1f2933;
+}
+
+h1 {
+    margin-bottom: 8px;
+}
+
+a {
+    color: #1e4f91;
+}
+
+input,
+textarea,
+button {
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.panel {
+    background: #ffffff;
+    border: 1px solid #d7dde5;
+    border-radius: 8px;
+    padding: 12px;
+    width: 340px;
+}
+
+.postCard {
+    margin-bottom: 10px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #d7dde5;
+    box-shadow: 1px 1px 2px #dfe4ea;
+    padding: 10px;
+}
+
+.postTitle {
+    font-weight: 700;
+    font-size: 17px;
+    color: #0f2f57;
+}
+
+.postDate {
+    color: #4d5c6b;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.postText {
+    color: #243445;
+    white-space: pre-wrap;
+}
+
+.btnDelete {
+    cursor: pointer;
+    font-size: 20px;
+    margin-right: 6px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    line-height: 1;
+}
