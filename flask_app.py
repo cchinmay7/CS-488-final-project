@@ -13,7 +13,27 @@ Session(app)
 
 
 def has_active_session():
-    return session.get('email') is not None
+    email = session.get('email')
+    if email is None:
+        return False
+
+    if session.get('username') is not None:
+        return True
+
+    user = aws.get_user_by_email(email)
+    if user is None:
+        session.pop('email', None)
+        session.pop('username', None)
+        return False
+
+    username = user.get('username', '')
+    if username == '':
+        session.pop('email', None)
+        session.pop('username', None)
+        return False
+
+    session['username'] = username
+    return True
 
 
 @app.route('/')
