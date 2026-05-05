@@ -137,7 +137,7 @@ def profileinfo():
 	if username == '':
 		return {'result': 'UserName cannot be blank'}
 
-	return aws.get_profile_info(username, session['username'])
+	return aws.get_profile_info(username)
 
 
 @app.route('/userposts')

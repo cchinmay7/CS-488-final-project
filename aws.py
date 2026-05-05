@@ -93,7 +93,7 @@ def login_user(login_value, password):
 # /////////////////////////////////////////////////////////////////////////////
 
 
-def get_profile_info(username, viewer_username):
+def get_profile_info(username):
 	user = get_user_by_username(username)
 	if user is None:
 		return {'result': 'User not found'}
@@ -105,8 +105,7 @@ def get_profile_info(username, viewer_username):
 	return {
 		'result': 'OK',
 		'username': user['username'],
-		'photo': photo,
-		'ownProfile': (user['username'].lower() == viewer_username.lower())
+		'photo': photo
 	}
 
 
