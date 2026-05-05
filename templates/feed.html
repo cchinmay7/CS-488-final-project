@@ -2,22 +2,19 @@
 <html>
     <head>
         <link rel="stylesheet" href="/static/styles.css" />
-        <title>Login</title>
+        <title>Feed</title>
     </head>
-    <body>
+    <body onload="init_feed();">
         <div class="topnav">
             <a class="navbtn" href="/feed.html">Feed</a>
             <a class="navbtn" href="/profile.html">Profile</a>
         </div>
 
-        <h1>Login</h1>
+        <h1>Feed</h1>
+        <div>Showing recent posts from other users.</div>
 
-        Email or UserName: <input type="text" id="login" /><br/>
-        Password: <input type="password" id="password" /><br/>
-
-        <button onclick="login();">Login</button>
-
-        <div><a href="/final">Need an account? Sign up</a></div>
+        <hr/>
+        <div id="divFeedPosts"></div>
 
         <script src="/static/script.js"></script>
     </body>

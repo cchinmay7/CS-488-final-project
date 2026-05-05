@@ -90,6 +90,33 @@ function login_response(response) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+function init_feed() {
+    loadDoc("/feedposts", feedposts_response);
+}
+
+function feedposts_response(response) {
+    let data = JSON.parse(response);
+    if (data["result"] != "OK") {
+        alert(data["result"]);
+        return;
+    }
+
+    let posts = data["posts"];
+    let temp = "";
+    for (let i = 0; i < posts.length; i++) {
+        temp += "<div>";
+        temp += "<b>@" + posts[i]["authorusername"] + "</b><br/>";
+        temp += posts[i]["text"] + "<br/>";
+        temp += "<small>" + posts[i]["createdat"] + "</small><br/>";
+        temp += "<a href=\"/reply.html?id=" + encodeURIComponent(posts[i]["postid"]) + "\">reply</a>";
+        temp += "</div><hr/>";
+    }
+
+    document.getElementById("divFeedPosts").innerHTML = temp;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 let profile_user = "";
 
 function init_own_profile(username) {

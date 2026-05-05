@@ -5,6 +5,11 @@
         <title>User Profile</title>
     </head>
     <body onload="init_user_profile('{{ username }}');">
+        <div class="topnav">
+            <a class="navbtn" href="/feed.html">Feed</a>
+            <a class="navbtn" href="/profile.html">Profile</a>
+        </div>
+
         <h1 id="hTitle">User Profile</h1>
 
         <img id="imgPhoto" src="" width="120" height="120" /><br/>
@@ -13,9 +18,6 @@
         <hr/>
         <h2>Posts</h2>
         <div id="divPosts"></div>
-
-        <!-- ///////////////////////////////////////////////////////////////////////////// -->
-        <div><a href="/logout.html">Logout</a></div>
 
         <script src="/static/script.js"></script>
     </body>

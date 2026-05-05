@@ -140,6 +140,24 @@ def list_user_posts(username):
 	return {'result': 'OK', 'posts': results}
 
 
+def list_feed_posts(exclude_username):
+	table = get_table(POSTS_TABLE)
+	results = []
+	items = table.scan().get('Items', [])
+
+	for item in items:
+		if item.get('parentid', '') != '':
+			continue
+		if item.get('authorusername', '').lower() == exclude_username.lower():
+			continue
+		results.append(item)
+
+	results.sort(key=lambda x: x.get('createdat', ''), reverse=True)
+	if len(results) > 10:
+		results = results[:10]
+	return {'result': 'OK', 'posts': results}
+
+
 def get_post_and_replies(postid):
 	table = get_table(POSTS_TABLE)
 	items = table.scan().get('Items', [])

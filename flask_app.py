@@ -102,6 +102,20 @@ def profile_html(username):
 	return render_template('user_profile.html', username=username)
 
 
+@app.route('/profile.html')
+def profile_shortcut_html():
+	if not is_logged_in():
+		return redirect('/login.html')
+	return redirect('/u/' + session['username'])
+
+
+@app.route('/feed.html')
+def feed_html():
+	if not is_logged_in():
+		return redirect('/login.html')
+	return render_template('feed.html', username=session['username'])
+
+
 @app.route('/reply.html')
 def reply_html():
 	if not is_logged_in():
@@ -136,6 +150,14 @@ def userposts():
 		return {'result': 'UserName cannot be blank'}
 
 	return aws.list_user_posts(username)
+
+
+@app.route('/feedposts')
+def feedposts():
+	if not is_logged_in():
+		return {'result': 'You must be logged in'}
+
+	return aws.list_feed_posts(session['username'])
 
 
 @app.route('/createpost')
