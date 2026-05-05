@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/styles.css" />
+        <title>My Profile</title>
+    </head>
+    <body onload="init_own_profile('{{ username }}');">
+        <h1 id="hTitle">My Profile</h1>
+
+        <img id="imgPhoto" src="" width="120" height="120" /><br/>
+        <div id="divUserName"></div>
+
+        <!-- ///////////////////////////////////////////////////////////////////////////// -->
+        <div>
+            New Post:<br/>
+            <textarea id="txtPost" rows="4" cols="60"></textarea><br/>
+            <button onclick="create_top_post();">Post</button>
+            <br/><br/>
+            Upload Photo:<br/>
+            <input type="file" id="filePhoto" /><br/>
+            <button onclick="upload_photo();">Upload Photo</button>
+        </div>
+
+        <hr/>
+        <h2>Posts</h2>
+        <div id="divPosts"></div>
+
+        <!-- ///////////////////////////////////////////////////////////////////////////// -->
+        <div><a href="/logout.html">Logout</a></div>
+
+        <script src="/static/script.js"></script>
+    </body>
+</html>

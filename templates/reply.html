@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/styles.css" />
+        <title>Reply</title>
+    </head>
+    <body onload="init_reply('{{ postid }}');">
+        <h1>Post</h1>
+        <div id="divMainPost"></div>
+
+        <!-- ///////////////////////////////////////////////////////////////////////////// -->
+        <h2>Replies</h2>
+        <div id="divReplies"></div>
+
+        <hr/>
+        Your Reply:<br/>
+        <textarea id="txtReply" rows="4" cols="60"></textarea><br/>
+        <button onclick="reply_to_post();">Reply</button>
+
+        <!-- ///////////////////////////////////////////////////////////////////////////// -->
+        <div><a href="javascript:history.back();">Back</a></div>
+
+        <script src="/static/script.js"></script>
+    </body>
+</html>
