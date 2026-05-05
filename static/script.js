@@ -105,7 +105,7 @@ function feedposts_response(response) {
     let temp = "";
     for (let i = 0; i < posts.length; i++) {
         temp += "<div>";
-        temp += "<b>@" + posts[i]["authorusername"] + "</b><br/>";
+        temp += "<b><a href=\"/u/" + encodeURIComponent(posts[i]["authorusername"]) + "\">@" + posts[i]["authorusername"] + "</a></b><br/>";
         temp += posts[i]["text"] + "<br/>";
         temp += "<small>" + posts[i]["createdat"] + "</small><br/>";
         temp += "<a href=\"/reply.html?id=" + encodeURIComponent(posts[i]["postid"]) + "\">reply</a>";
