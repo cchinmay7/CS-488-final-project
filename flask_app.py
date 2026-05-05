@@ -20,6 +20,13 @@ def is_logged_in():
 def final():
     return render_template('signup.html')
 
+
+@app.route('/account.html')
+def account_html():
+	if not is_logged_in():
+		return redirect('/final')
+	return render_template('account.html', username=session['username'])
+
 @app.route('/signup')
 def signup():
 	email = request.args.get('email', '').strip()
