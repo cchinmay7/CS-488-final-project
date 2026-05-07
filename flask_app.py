@@ -10,84 +10,84 @@ Session(app)
 
 
 def is_logged_in():
-	if session.get('email') is None:
-		return False
-	if session.get('username') is None:
-		return False
-	return True
+    if session.get('email') is None:
+        return False
+    if session.get('username') is None:
+        return False
+    return True
 
 @app.route('/final')
 def final():
-	if is_logged_in():
-		return redirect('/u/' + session['username'])
-	return render_template('signup.html')
+    if is_logged_in():
+        return redirect('/u/' + session['username'])
+    return render_template('signup.html')
 
 
 @app.route('/login.html')
 def login_html():
-	if is_logged_in():
-		return redirect('/u/' + session['username'])
-	return render_template('login.html')
+    if is_logged_in():
+        return redirect('/u/' + session['username'])
+    return render_template('login.html')
 
 
 @app.route('/signup')
 def signup():
-	email = request.args.get('email', '').strip()
-	username = request.args.get('username', '').strip()
-	password = request.args.get('password', '').strip()
+    email = request.args.get('email', '').strip()
+    username = request.args.get('username', '').strip()
+    password = request.args.get('password', '').strip()
 
-	if email == '':
-		return {'result': 'Email cannot be blank'}
+    if email == '':
+        return {'result': 'Email cannot be blank'}
 
-	if '@' not in email or '.' not in email:
-		return {'result': 'Email must include @ and .'}
+    if '@' not in email or '.' not in email:
+        return {'result': 'Email must include @ and .'}
 
-	if username == '':
-		return {'result': 'UserName cannot be blank'}
+    if username == '':
+        return {'result': 'UserName cannot be blank'}
 
-	if password == '':
-		return {'result': 'Password cannot be blank'}
+    if password == '':
+        return {'result': 'Password cannot be blank'}
 
-	result = aws.signup_user(email, username, password)
-	if result['result'] != 'OK':
-		return {'result': result['result']}
+    result = aws.signup_user(email, username, password)
+    if result['result'] != 'OK':
+        return {'result': result['result']}
 
-	user = result['user']
-	session['email'] = user['email']
-	session['username'] = user['username']
-	return {'result': 'OK', 'username': user['username']}
+    user = result['user']
+    session['email'] = user['email']
+    session['username'] = user['username']
+    return {'result': 'OK', 'username': user['username']}
 
 @app.route('/login')
 def login():
-	login_value = request.args.get('login', '').strip()
-	password = request.args.get('password', '').strip()
+    login_value = request.args.get('login', '').strip()
+    password = request.args.get('password', '').strip()
 
-	if login_value == '':
-		return {'result': 'Email or UserName cannot be blank'}
+    if login_value == '':
+        return {'result': 'Email or UserName cannot be blank'}
 
-	if password == '':
-		return {'result': 'Password cannot be blank'}
+    if password == '':
+        return {'result': 'Password cannot be blank'}
 
-	result = aws.login_user(login_value, password)
-	if result['result'] != 'OK':
-		return {'result': result['result']}
+    result = aws.login_user(login_value, password)
+    if result['result'] != 'OK':
+        return {'result': result['result']}
 
-	user = result['user']
-	session['email'] = user['email']
-	session['username'] = user['username']
-	return {'result': 'OK', 'username': user['username']}
+    user = result['user']
+    session['email'] = user['email']
+    session['username'] = user['username']
+    return {'result': 'OK', 'username': user['username']}
 
 @app.route('/logout')
 def logout():
-	session.pop('email', None)
-	session.pop('username', None)
-	return {'result': 'OK'}
+    session.pop('email', None)
+    session.pop('username', None)
+    return {'result': 'OK'}
 
 @app.route('/logout.html')
 def logout_html():
-	session.pop('email', None)
-	session.pop('username', None)
-	return redirect('/login.html')
+    session.pop('email', None)
+    session.pop('username', None)
+    return redirect('/login.html')
 
 
 # /////////////////////////////////////////////////////////////////////////////
@@ -95,98 +95,95 @@ def logout_html():
 
 @app.route('/u/<username>')
 def profile_html(username):
-	if not is_logged_in():
-		return redirect('/login.html')
-	if username.lower() == session['username'].lower():
-		return render_template('own_profile.html', username=username)
-	return render_template('user_profile.html', username=username)
+    if not is_logged_in():
+        return redirect('/login.html')
+    if username.lower() == session['username'].lower():
+        return render_template('own_profile.html', username=username)
+    return render_template('user_profile.html', username=username)
 
 
 @app.route('/profile.html')
 def profile_shortcut_html():
-	if not is_logged_in():
-		return redirect('/login.html')
-	return redirect('/u/' + session['username'])
+    if not is_logged_in():
+        return redirect('/login.html')
+    return redirect('/u/' + session['username'])
 
 
 @app.route('/feed.html')
 def feed_html():
-	if not is_logged_in():
-		return redirect('/login.html')
-	return render_template('feed.html', username=session['username'])
+    if not is_logged_in():
+        return redirect('/login.html')
+    return render_template('feed.html', username=session['username'])
 
 
 @app.route('/reply.html')
 def reply_html():
-	if not is_logged_in():
-		return redirect('/login.html')
+    if not is_logged_in():
+        return redirect('/login.html')
 
-	postid = request.args.get('id', '').strip()
-	if postid == '':
-		return redirect('/u/' + session['username'])
+    postid = request.args.get('id', '').strip()
+    if postid == '':
+        return redirect('/u/' + session['username'])
 
-	return render_template('reply.html', postid=postid)
+    return render_template('reply.html', postid=postid)
 
 
 @app.route('/profileinfo')
 def profileinfo():
-	if not is_logged_in():
-		return {'result': 'You must be logged in'}
+    if not is_logged_in():
+        return {'result': 'You must be logged in'}
 
-	username = request.args.get('username', '').strip()
-	if username == '':
-		return {'result': 'UserName cannot be blank'}
+    username = request.args.get('username', '').strip()
+    if username == '':
+        return {'result': 'UserName cannot be blank'}
 
-	return aws.get_profile_info(username)
+    return aws.get_profile_info(username)
 
 
 @app.route('/userposts')
 def userposts():
-	if not is_logged_in():
-		return {'result': 'You must be logged in'}
+    if not is_logged_in():
+        return {'result': 'You must be logged in'}
 
-	username = request.args.get('username', '').strip()
-	if username == '':
-		return {'result': 'UserName cannot be blank'}
+    username = request.args.get('username', '').strip()
+    if username == '':
+        return {'result': 'UserName cannot be blank'}
 
-	return aws.list_user_posts(username)
+    return aws.list_user_posts(username)
 
 
 @app.route('/feedposts')
 def feedposts():
-	if not is_logged_in():
-		return {'result': 'You must be logged in'}
+    if not is_logged_in():
+        return {'result': 'You must be logged in'}
 
-	return aws.list_feed_posts(session['username'])
+    return aws.list_feed_posts(session['username'])
 
 
 @app.route('/createpost')
 def createpost():
-	if not is_logged_in():
-		return {'result': 'You must be logged in'}
+    if not is_logged_in():
+        return {'result': 'You must be logged in'}
 
-	text = request.args.get('text', '').strip()
-	parent = request.args.get('parent', '').strip()
+    text = request.args.get('text', '').strip()
+    parent = request.args.get('parent', '').strip()
 
-	if text == '':
-		return {'result': 'Post text cannot be blank'}
+    if text == '':
+        return {'result': 'Post text cannot be blank'}
 
-	if parent == '':
-		parent = ''
-
-	return aws.create_post(session['username'], text, parent)
+    return aws.create_post(session['username'], text, parent)
 
 
 @app.route('/post')
 def post():
-	if not is_logged_in():
-		return {'result': 'You must be logged in'}
+    if not is_logged_in():
+        return {'result': 'You must be logged in'}
 
-	postid = request.args.get('id', '').strip()
-	if postid == '':
-		return {'result': 'Post ID cannot be blank'}
+    postid = request.args.get('id', '').strip()
+    if postid == '':
+        return {'result': 'Post ID cannot be blank'}
 
-	return aws.get_post_and_replies(postid)
+    return aws.get_post_and_replies(postid)
 
 
 # /////////////////////////////////////////////////////////////////////////////
@@ -194,12 +191,12 @@ def post():
 
 @app.route('/uploadphoto', methods=['POST'])
 def uploadphoto():
-	if not is_logged_in():
-		return {'result': 'You must be logged in'}
+    if not is_logged_in():
+        return {'result': 'You must be logged in'}
 
-	if 'file' not in request.files:
-		return {'result': 'Please choose a file'}
+    if 'file' not in request.files:
+        return {'result': 'Please choose a file'}
 
-	file = request.files['file']
-	return aws.upload_profile_photo(session['email'], file)
+    file = request.files['file']
+    return aws.upload_profile_photo(session['email'], file)
 

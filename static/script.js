@@ -119,7 +119,7 @@ function feedposts_response(response) {
 
 let profile_user = "";
 
-function init_own_profile(username) {
+function init_profile(username) {
     profile_user = username;
     let url = "/profileinfo?username=" + encodeURIComponent(username);
     loadDoc(url, profileinfo_response);
@@ -128,13 +128,12 @@ function init_own_profile(username) {
     loadDoc(postsURL, userposts_response);
 }
 
-function init_user_profile(username) {
-    profile_user = username;
-    let url = "/profileinfo?username=" + encodeURIComponent(username);
-    loadDoc(url, profileinfo_response);
+function init_own_profile(username) {
+    init_profile(username);
+}
 
-    let postsURL = "/userposts?username=" + encodeURIComponent(username);
-    loadDoc(postsURL, userposts_response);
+function init_user_profile(username) {
+    init_profile(username);
 }
 
 function profileinfo_response(response) {
@@ -219,14 +218,8 @@ function upload_photo() {
     xhttp.send(formData);
 }
 
-function upload_photo_response(response) {
-    let data = JSON.parse(response);
-    if (data["result"] != "OK") {
-        alert(data["result"]);
-        return;
-    }
-
-    document.getElementById("imgPhoto").src = data["url"];
+function upload_photo_response() {
+    location.reload();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
